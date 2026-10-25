@@ -1,0 +1,12 @@
+groups:
+  - name: caption_app
+    rules:
+      - alert: CaptionAppDown
+        # AI prompt: Alert when the caption_app metrics endpoint is unreachable for 15 seconds.
+        expr: up{job="caption_app"} == 0
+        for: 15s
+        labels:
+          severity: warning
+        annotations:
+          summary: Captioning app metrics endpoint is down
+          description: Prometheus cannot scrape the app. Check that Streamlit is running and its page has been opened.

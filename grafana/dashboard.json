@@ -1,0 +1,1400 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "description": "CPU captioning: health, throughput, latency, bulk activity, host resources and client outcomes. Five-second refresh. AI-generated query prompts are recorded in each panel description.",
+  "editable": true,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "da3408-a4-prometheus"
+      },
+      "description": "UP means Prometheus can scrape the exporter; it does not prove the caption model is healthy. Linear scale; time axis uses browser local time.\n\nAI-generated PromQL. Prompt: Build a CPU captioning dashboard from caption_* metrics and node_exporter; use 1-minute rates, distinguish Single/Bulk, aggregate sessions for overall counts, calculate successful latency only, and correlate bulk activity with host resources.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#0072B2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisLabel": "Exporter health",
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "#D55E00",
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "#0072B2",
+                  "text": "UP"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "min": 0,
+          "noValue": "No samples",
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "single"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0072B2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bulk"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E69F00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "success"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#009E73",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "failure"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#CC79A7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 8,
+        "h": 4
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "up{job=\"caption_app\"}",
+          "instant": true,
+          "legendFormat": "App exporter",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "up{job=\"node\"}",
+          "instant": true,
+          "legendFormat": "Node exporter",
+          "range": false,
+          "refId": "B"
+        }
+      ],
+      "title": "Exporter health",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "da3408-a4-prometheus"
+      },
+      "description": "Mean supported image entries per submitted ZIP since app restart. Includes entries that fail decoding. No ZIPs means no value. AI prompt: Divide the batch histogram sum by its count to display mean ZIP size.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#0072B2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisLabel": "Mean ZIP batch size (images)",
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always"
+          },
+          "min": 0,
+          "noValue": "No samples",
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "single"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0072B2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bulk"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E69F00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "success"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#009E73",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "failure"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#CC79A7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 8,
+        "y": 0,
+        "w": 8,
+        "h": 4
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "caption_batch_images_sum{job=\"caption_app\"} / caption_batch_images_count{job=\"caption_app\"}",
+          "instant": true,
+          "legendFormat": "Images per ZIP",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Mean ZIP size (images)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "da3408-a4-prometheus"
+      },
+      "description": "Space available to the current user on the root filesystem. Model files and monitoring storage share this disk. Linear scale; time axis uses browser local time.\n\nAI-generated PromQL. Prompt: Build a CPU captioning dashboard from caption_* metrics and node_exporter; use 1-minute rates, distinguish Single/Bulk, aggregate sessions for overall counts, calculate successful latency only, and correlate bulk activity with host resources.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#0072B2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisLabel": "Root disk available (bytes)",
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always"
+          },
+          "min": 0,
+          "noValue": "No samples",
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "single"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0072B2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bulk"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E69F00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "success"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#009E73",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "failure"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#CC79A7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 0,
+        "w": 8,
+        "h": 4
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "node_filesystem_avail_bytes{job=\"node\",mountpoint=\"/\",fstype!=\"rootfs\"}",
+          "instant": true,
+          "legendFormat": "Available space",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Root disk available (bytes)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "da3408-a4-prometheus"
+      },
+      "description": "Successful images per second. One-second estimates show bursts; one-minute averages include idle time and smooth bursts. Both average over their preceding window. Linear scale. AI prompt: Combine the existing one-second and one-minute throughput queries in one panel, preserving separate modes. Colours: bulk one-second orange, bulk one-minute purple; single one-second light blue, single one-minute green. One-minute lines use long dashes, without point markers obscuring the gaps.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#0072B2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisLabel": "Throughput (images/s)",
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always"
+          },
+          "min": 0,
+          "noValue": "No samples",
+          "unit": "suffix: images/s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "single / 1 sec"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#56B4E9"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 3
+              },
+              {
+                "id": "custom.showPoints",
+                "value": "never"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "fill": "solid"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "single / 1 min"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#009E73"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 3
+              },
+              {
+                "id": "custom.showPoints",
+                "value": "never"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "fill": "dash",
+                  "dash": [
+                    12,
+                    8
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bulk / 1 sec"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#E69F00"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 3
+              },
+              {
+                "id": "custom.showPoints",
+                "value": "never"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "fill": "solid"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bulk / 1 min"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#CC79A7"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 3
+              },
+              {
+                "id": "custom.showPoints",
+                "value": "never"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "fill": "dash",
+                  "dash": [
+                    12,
+                    8
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "sum by(mode) (rate(caption_images_total{job=\"caption_app\",outcome=\"success\"}[1m])) or on(mode) (sum by(mode) (caption_requests_total{job=\"caption_app\"}) * 0)",
+          "instant": false,
+          "legendFormat": "{{mode}} / 1 min",
+          "range": true,
+          "refId": "A",
+          "interval": "1s"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "sum by(mode) (rate(caption_images_total{job=\"caption_app\",outcome=\"success\"}[1s])) or on(mode) (sum by(mode) (caption_requests_total{job=\"caption_app\"}) * 0)",
+          "instant": false,
+          "interval": "1s",
+          "legendFormat": "{{mode}} / 1 sec",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Successful throughput: 1-second and 1-minute averages",
+      "type": "timeseries",
+      "interval": "1s",
+      "maxDataPoints": 2000
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "da3408-a4-prometheus"
+      },
+      "description": "Time sum divided by observation count over one minute. Includes image decoding and lock wait; excludes model loading. No observations means a gap. Linear scale; time axis uses browser local time.\n\nAI-generated PromQL. Prompt: Build a CPU captioning dashboard from caption_* metrics and node_exporter; use 1-minute rates, distinguish Single/Bulk, aggregate sessions for overall counts, calculate successful latency only, and correlate bulk activity with host resources.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#0072B2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisLabel": "Mean successful image latency (s)",
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always"
+          },
+          "min": 0,
+          "noValue": "No samples",
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "single"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0072B2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bulk"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E69F00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "success"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#009E73",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "failure"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#CC79A7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "sum by(mode) (rate(caption_image_seconds_sum{job=\"caption_app\",outcome=\"success\"}[1m])) / sum by(mode) (rate(caption_image_seconds_count{job=\"caption_app\",outcome=\"success\"}[1m]))",
+          "instant": false,
+          "legendFormat": "{{mode}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Mean successful image latency (s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "da3408-a4-prometheus"
+      },
+      "description": "Host-wide average CPU usage across all cores. Compare the same time interval with bulk activity below; other processes also contribute. Linear scale; time axis uses browser local time.\n\nAI-generated PromQL. Prompt: Build a CPU captioning dashboard from caption_* metrics and node_exporter; use 1-minute rates, distinguish Single/Bulk, aggregate sessions for overall counts, calculate successful latency only, and correlate bulk activity with host resources.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#0072B2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisLabel": "CPU busy (%)",
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always"
+          },
+          "max": 100,
+          "min": 0,
+          "noValue": "No samples",
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "single"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0072B2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bulk"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E69F00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "success"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#009E73",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "failure"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#CC79A7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "100 * (1 - avg(rate(node_cpu_seconds_total{job=\"node\",mode=\"idle\"}[1m])))",
+          "instant": false,
+          "legendFormat": "Host CPU",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "CPU busy (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "da3408-a4-prometheus"
+      },
+      "description": "Bulk activity aligned with CPU and memory above. App samples are collected every 250 ms; shorter requests can still be missed. Linear scale; time axis uses browser local time.\n\nAI-generated PromQL. Prompt: Build a CPU captioning dashboard from caption_* metrics and node_exporter; use 1-minute rates, distinguish Single/Bulk, aggregate sessions for overall counts, calculate successful latency only, and correlate bulk activity with host resources.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#0072B2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisLabel": "Active requests over time",
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always"
+          },
+          "min": 0,
+          "noValue": "No samples",
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "single"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0072B2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bulk"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E69F00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "success"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#009E73",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "failure"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#CC79A7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "caption_active_requests{job=\"caption_app\"}",
+          "instant": false,
+          "legendFormat": "{{mode}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Active requests over time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "da3408-a4-prometheus"
+      },
+      "description": "Host used memory and app resident memory as percentages of total host RAM. The app is part of host usage, not additional usage. Host usage uses MemAvailable; app usage uses RSS. Linear scale. AI prompt: Plot host memory usage and app RSS divided by total host RAM, both as percentages.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#0072B2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisLabel": "Host RAM (%)",
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always"
+          },
+          "max": 100,
+          "min": 0,
+          "noValue": "No samples",
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Host memory"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#0072B2"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "App resident memory"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#E69F00"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 12,
+        "h": 8
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "100 * (1 - node_memory_MemAvailable_bytes{job=\"node\"} / node_memory_MemTotal_bytes{job=\"node\"})",
+          "instant": false,
+          "legendFormat": "Host memory",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "refId": "B",
+          "expr": "100 * caption_process_memory_bytes{job=\"caption_app\"} / scalar(node_memory_MemTotal_bytes{job=\"node\"})",
+          "legendFormat": "App resident memory",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "range": true,
+          "instant": false
+        }
+      ],
+      "title": "Memory usage (% of host RAM)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "da3408-a4-prometheus"
+      },
+      "description": "Summary sum/count over one minute. Includes model loading and the complete ZIP loop; not per-image inference time. Linear scale; time axis uses browser local time.\n\nAI-generated PromQL. Prompt: Build a CPU captioning dashboard from caption_* metrics and node_exporter; use 1-minute rates, distinguish Single/Bulk, aggregate sessions for overall counts, calculate successful latency only, and correlate bulk activity with host resources.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#0072B2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisLabel": "Mean complete request duration (s)",
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always"
+          },
+          "min": 0,
+          "noValue": "No samples",
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "single"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0072B2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bulk"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E69F00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "success"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#009E73",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "failure"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#CC79A7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 20,
+        "w": 12,
+        "h": 8
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "rate(caption_request_seconds_sum{job=\"caption_app\"}[1m]) / rate(caption_request_seconds_count{job=\"caption_app\"}[1m])",
+          "instant": false,
+          "legendFormat": "{{mode}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Mean complete request duration (s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "da3408-a4-prometheus"
+      },
+      "description": "Successful and failed image attempts by browser session and mode, since app restart. This provides client tracking and includes skipped images. Random browser session IDs distinguish clients, not real identities. Counters reset on process restart. Linear scale; time axis uses browser local time.\n\nAI-generated PromQL. Prompt: Build a CPU captioning dashboard from caption_* metrics and node_exporter; use 1-minute rates, distinguish Single/Bulk, aggregate sessions for overall counts, calculate successful latency only, and correlate bulk activity with host resources. Aborted request totals are also shown by mode; these are distinct from individual skipped images.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#0072B2",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisLabel": "Images by session since restart",
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always"
+          },
+          "min": 0,
+          "noValue": "No samples",
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "single"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0072B2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bulk"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E69F00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "success"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#009E73",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "failure"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#CC79A7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 28,
+        "w": 24,
+        "h": 6
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "expr": "caption_images_total{job=\"caption_app\"}",
+          "instant": true,
+          "legendFormat": "{{session}} / {{mode}} / {{outcome}}",
+          "range": false,
+          "refId": "A"
+        },
+        {
+          "refId": "B",
+          "expr": "caption_request_failures_total{job=\"caption_app\"}",
+          "legendFormat": "{{mode}} / aborted requests",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "da3408-a4-prometheus"
+          },
+          "range": false,
+          "instant": true
+        }
+      ],
+      "title": "Image outcomes by session",
+      "type": "stat"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "tags": [
+    "DA3408",
+    "assignment4"
+  ],
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
+  },
+  "timezone": "browser",
+  "title": "DA3408 A4 | CPU image captioning",
+  "uid": "da3408-a4-captioning"
+}
